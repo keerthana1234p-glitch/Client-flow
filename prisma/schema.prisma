@@ -1,0 +1,88 @@
+// Prisma schema for OJIX ClientFlow
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Workspace {
+  id        String     @id @default(cuid())
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  users     User[]
+  contacts  Contact[]
+  deals     Deal[]
+  followUps FollowUp[]
+  notes     Note[]
+}
+
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  password    String
+  name        String
+  role        String    @default("VIEWER") // ADMIN, OWNER, VIEWER
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Contact {
+  id            String    @id @default(cuid())
+  name          String
+  email         String
+  phone         String?
+  workspaceId   String
+  workspace     Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  deals         Deal[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([email, workspaceId])
+}
+
+model Deal {
+  id             String     @id @default(cuid())
+  title          String
+  value          Float      @default(0)
+  stage          String     @default("LEAD") // LEAD, QUALIFIED, WON, LOST
+  contactId      String?
+  contact        Contact?   @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  workspaceId    String
+  workspace      Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  lastActivityAt DateTime   @default(now())
+  followUps      FollowUp[]
+  notes          Note[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model FollowUp {
+  id          String    @id @default(cuid())
+  dueAt       DateTime
+  status      String    @default("PENDING") // PENDING, DONE
+  action      String?   @default("Follow up touchpoint")
+  dealId      String
+  deal        Deal      @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Note {
+  id          String    @id @default(cuid())
+  content     String
+  dealId      String
+  deal        Deal      @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}

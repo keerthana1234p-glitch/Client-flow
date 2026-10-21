@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <clipPath id="ojix-tab-circle">
+      <circle cx="100" cy="100" r="96" />
+    </clipPath>
+    <linearGradient id="ojix-blue-grad" x1="0" y1="0" x2="200" y2="42" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#2563EB" />
+      <stop offset="1" stopColor="#4F46E5" />
+    </linearGradient>
+  </defs>
+
+  <!-- Circular White Badge -->
+  <circle cx="100" cy="100" r="96" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="6" />
+
+  <!-- Top Electric Blue Header Bar -->
+  <rect x="0" y="0" width="200" height="42" fill="url(#ojix-blue-grad)" clip-path="url(#ojix-tab-circle)" />
+
+  <!-- OJIX Letters -->
+  <text 
+    x="100" 
+    y="146" 
+    text-anchor="middle" 
+    font-family="'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
+    font-weight="900" 
+    font-size="70" 
+    letter-spacing="-1.5px"
+  >
+    <tspan fill="#0F172A">OJI</tspan><tspan fill="#2563EB">X</tspan>
+  </text>
+</svg>
