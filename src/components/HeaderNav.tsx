@@ -320,15 +320,15 @@ export function HeaderNav() {
             })}
           </nav>
 
-          {/* Dedicated Sign Off Button */}
+          {/* Dedicated Log Out Button */}
           <div className="pl-3 border-l border-slate-200">
             <button
               onClick={handleLogout}
               className="px-3.5 py-1.5 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 hover:border-rose-300 transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
-              title="Sign off to switch account"
+              title="Log out to switch account"
             >
               <LogOut className="w-3.5 h-3.5 text-rose-600" />
-              <span>Sign Off</span>
+              <span>Log Out</span>
             </button>
           </div>
         </div>
@@ -347,7 +347,7 @@ export function HeaderNav() {
               className="ml-auto underline font-bold hover:text-rose-950 shrink-0 text-[11px] flex items-center gap-1"
             >
               <LogOut className="w-3 h-3 text-rose-600" />
-              Sign Off to Change Account
+              Log Out to Change Account
             </button>
           </div>
         </div>

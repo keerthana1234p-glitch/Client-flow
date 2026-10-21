@@ -281,6 +281,21 @@ export function AuthView() {
         <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between bg-white relative">
           
           <div className="space-y-5">
+            {/* Top Login Title Bar */}
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-[11px] font-extrabold uppercase tracking-wider mb-1">
+                  <Lock className="w-3 h-3 text-blue-600" />
+                  <span>Account Login</span>
+                </div>
+                <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                  Log In to ClientFlow
+                </h1>
+              </div>
+              <span className="text-[11px] font-bold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-lg">
+                OJIX CRM OS
+              </span>
+            </div>
             
             {/* Header: Friendly 3D Robot Mascot Greeting Card */}
             <div className="flex items-center gap-3.5 p-3 sm:p-4 rounded-2xl bg-gradient-to-r from-blue-50/90 via-indigo-50/50 to-sky-50/60 border border-blue-100 shadow-sm relative overflow-hidden">
@@ -547,7 +562,7 @@ export function AuthView() {
                   </>
                 ) : (
                   <>
-                    <span>Enter Workspace as {selectedRole.name}</span>
+                    <span>Log In as {selectedRole.name}</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
