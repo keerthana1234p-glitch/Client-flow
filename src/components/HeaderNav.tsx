@@ -83,8 +83,8 @@ export function HeaderNav() {
   const [istTime, setIstTime] = useState<string>('');
   const [overdueCount, setOverdueCount] = useState<number>(0);
 
-  // If on login, signup, or standalone TeamFlow page, DO NOT render the ClientFlow CRM header
-  const isAuthPage = pathname === '/login' || pathname === '/signup' || pathname === '/teamflow';
+  // If on login or signup, DO NOT render the ClientFlow CRM header
+  const isAuthPage = pathname === '/login' || pathname === '/signup';
 
   // Live IST Clock
   useEffect(() => {
@@ -110,7 +110,16 @@ export function HeaderNav() {
       const match = document.cookie.match(/(^|;)\s*clientflow_session\s*=\s*([^;]+)/);
       if (match) {
         const parsed = JSON.parse(decodeURIComponent(match[2]));
-        setSession(parsed);
+        setSession((prev) => {
+          if (
+            prev?.userId === parsed.userId &&
+            prev?.role === parsed.role &&
+            prev?.workspaceId === parsed.workspaceId
+          ) {
+            return prev;
+          }
+          return parsed;
+        });
       } else {
         setSession(null);
         if (!isAuthPage) {
@@ -141,10 +150,27 @@ export function HeaderNav() {
     checkSession();
     fetchBadgeCounts();
 
-    const handleRoleChange = () => checkSession();
+    const interval = setInterval(fetchBadgeCounts, 45000);
+    const handleRoleChange = () => {
+      checkSession();
+      fetchBadgeCounts();
+    };
+
     window.addEventListener('clientflow_role_changed', handleRoleChange);
-    return () => window.removeEventListener('clientflow_role_changed', handleRoleChange);
-  }, [pathname]);
+    window.addEventListener('clientflow_badge_refresh', fetchBadgeCounts);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('clientflow_role_changed', handleRoleChange);
+      window.removeEventListener('clientflow_badge_refresh', fetchBadgeCounts);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthPage) {
+      checkSession();
+    }
+  }, [pathname, isAuthPage]);
 
   const handleLogout = async () => {
     try {
@@ -266,7 +292,7 @@ export function HeaderNav() {
       {/* 2. Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
         {/* Brand Logo & Name */}
-        <Link href="/pipeline" className="flex items-center gap-3 group">
+        <Link href="/pipeline" prefetch={true} className="flex items-center gap-3 group">
           <OjixLogo size={36} className="shrink-0" />
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
@@ -302,6 +328,7 @@ export function HeaderNav() {
                 <Link
                   key={tab.href}
                   href={tab.href}
+                  prefetch={true}
                   className={`px-3 py-2 rounded-lg flex items-center gap-2 transition-all ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'

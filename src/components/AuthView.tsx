@@ -23,8 +23,7 @@ import {
   KeyRound,
   ShieldAlert,
   ShieldCheck,
-  Zap,
-  FolderKanban
+  Zap
 } from 'lucide-react';
 import { OjixLogo } from '@/components/OjixLogo';
 
@@ -275,28 +274,6 @@ export function AuthView() {
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span><strong>4-Tier RBAC & Shield:</strong> Strict tenant isolation & 409 guard</span>
             </div>
-
-            {/* Standalone Team Projects Launcher Option */}
-            <div className="pt-2">
-              <Link
-                href="/teamflow"
-                className="group flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-cyan-950/80 to-blue-950/80 border border-cyan-500/40 hover:border-cyan-400 transition-all shadow-md hover:shadow-cyan-500/20"
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300">
-                    <FolderKanban className="w-4 h-4 text-cyan-400" />
-                  </div>
-                  <div>
-                    <div className="text-[11px] font-black text-white flex items-center gap-1.5">
-                      <span>Visit OJIX TeamFlow</span>
-                      <span className="text-[8px] font-extrabold px-1.5 py-0.2 rounded bg-cyan-500/30 text-cyan-200 border border-cyan-400/30 uppercase">Projects OS</span>
-                    </div>
-                    <p className="text-[10px] text-cyan-200/70">Tasks, 4 Team Roles & Sprint Board ↗</p>
-                  </div>
-                </div>
-                <ArrowRight className="w-3.5 h-3.5 text-cyan-400 group-hover:translate-x-1 transition-transform shrink-0" />
-              </Link>
-            </div>
           </div>
 
         </div>
@@ -316,16 +293,9 @@ export function AuthView() {
                   Log In to ClientFlow
                 </h1>
               </div>
-              
-              <Link
-                href="/teamflow"
-                className="flex items-center gap-1.5 text-[11px] font-bold text-cyan-800 bg-cyan-50 hover:bg-cyan-100 border border-cyan-200 px-3 py-1.5 rounded-lg transition-all shadow-2xs group"
-                title="Open Team Projects (OJIX TeamFlow)"
-              >
-                <FolderKanban className="w-3.5 h-3.5 text-cyan-600" />
-                <span>Visit Team Projects</span>
-                <ArrowRight className="w-3 h-3 text-cyan-500 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
+              <span className="text-[11px] font-bold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-lg">
+                OJIX CRM OS
+              </span>
             </div>
             
             {/* Header: Friendly 3D Robot Mascot Greeting Card */}
