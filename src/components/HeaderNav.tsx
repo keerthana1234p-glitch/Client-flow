@@ -15,7 +15,8 @@ import {
   Briefcase, 
   UserCheck, 
   Eye,
-  LogOut
+  LogOut,
+  FolderKanban
 } from 'lucide-react';
 import { OjixLogo } from '@/components/OjixLogo';
 
@@ -172,6 +173,7 @@ export function HeaderNav() {
       return [
         { href: '/contacts', label: 'Client Contacts', icon: Users, badge: null },
         { href: '/pipeline', label: 'Pipeline Overview', icon: Kanban, badge: 'Read-only' },
+        { href: '/projects', label: 'Team Projects', icon: FolderKanban, badge: 'TeamFlow', badgeColor: 'bg-cyan-50 text-cyan-800 border border-cyan-200' },
       ];
     }
 
@@ -179,6 +181,7 @@ export function HeaderNav() {
       return [
         { href: '/contacts', label: 'Contacts', icon: Users, badge: null },
         { href: '/pipeline', label: 'My Pipeline', icon: Kanban, badge: null },
+        { href: '/projects', label: 'Team Projects', icon: FolderKanban, badge: 'TeamFlow', badgeColor: 'bg-cyan-50 text-cyan-800 border border-cyan-200' },
         { 
           href: '/queue/overdue', 
           label: 'My Overdue Tasks', 
@@ -193,6 +196,7 @@ export function HeaderNav() {
       return [
         { href: '/contacts', label: 'Contacts', icon: Users, badge: null },
         { href: '/pipeline', label: 'Pipeline', icon: Kanban, badge: null },
+        { href: '/projects', label: 'Team Projects', icon: FolderKanban, badge: 'TeamFlow', badgeColor: 'bg-cyan-50 text-cyan-800 border border-cyan-200' },
         { 
           href: '/queue/overdue', 
           label: 'Overdue Follow-ups', 
@@ -207,6 +211,7 @@ export function HeaderNav() {
     return [
       { href: '/contacts', label: 'Contacts', icon: Users, badge: null },
       { href: '/pipeline', label: 'Pipeline', icon: Kanban, badge: null },
+      { href: '/projects', label: 'Team Projects', icon: FolderKanban, badge: 'TeamFlow', badgeColor: 'bg-cyan-50 text-cyan-800 border border-cyan-200' },
       { 
         href: '/queue/overdue', 
         label: 'Overdue Follow-ups', 
