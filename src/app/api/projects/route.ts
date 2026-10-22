@@ -29,13 +29,24 @@ export async function GET(req: NextRequest) {
     const stageParam = req.nextUrl.searchParams.get('stage') || 'all';
     const workspaceIdParam = req.nextUrl.searchParams.get('workspaceId');
 
+    // Extract workspace from session cookie if present
+    const sessionCookie = req.cookies.get('clientflow_session')?.value;
+    let sessionWorkspaceId: string | undefined = undefined;
+    if (sessionCookie) {
+      try {
+        const parsed = JSON.parse(decodeURIComponent(sessionCookie));
+        sessionWorkspaceId = parsed.workspaceId;
+      } catch {}
+    }
+
     // Build Prisma query condition
     const whereCondition: any = {};
     if (stageParam && stageParam.toUpperCase() !== 'ALL') {
       whereCondition.stage = stageParam.toUpperCase();
     }
-    if (workspaceIdParam) {
-      whereCondition.workspaceId = workspaceIdParam;
+    const targetWorkspace = workspaceIdParam || sessionWorkspaceId;
+    if (targetWorkspace && targetWorkspace !== 'all') {
+      whereCondition.workspaceId = targetWorkspace;
     }
 
     const deals = await prisma.deal.findMany({
