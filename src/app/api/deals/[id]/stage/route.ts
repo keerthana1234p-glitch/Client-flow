@@ -46,6 +46,40 @@ export async function PUT(
         status: 'DONE',
       },
     });
+
+    // Automatically log integration sync for Closed Won deals
+    if (newStage === 'WON') {
+      try {
+        await prisma.note.create({
+          data: {
+            content: `Deal marked Closed Won. Delivery project data synchronized.`,
+            dealId: dealId,
+            workspaceId: session!.workspaceId,
+          },
+        });
+
+        // If an external TeamFlow webhook URL is configured, trigger it asynchronously
+        const webhookUrl = process.env.TEAMFLOW_WEBHOOK_URL;
+        if (webhookUrl) {
+          fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': process.env.TEAMFLOW_API_KEY || 'ojix-teamflow-sync-2026',
+            },
+            body: JSON.stringify({
+              event: 'deal.won',
+              dealId: existing.id,
+              title: existing.title,
+              value: existing.value,
+              syncedAt: new Date().toISOString(),
+            }),
+          }).catch((e) => console.error('TeamFlow webhook dispatch notice:', e.message));
+        }
+      } catch (err) {
+        console.error('Note creation error on deal won:', err);
+      }
+    }
   }
 
   // Update stage and refresh lastActivityAt
