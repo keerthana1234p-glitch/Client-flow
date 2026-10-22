@@ -7,6 +7,8 @@ export default defineConfig({
     globals: true,
     testTimeout: 20000,
     fileParallelism: false,
+    include: ['src/**/*.test.ts'],
+    exclude: ['**/node_modules/**', '**/scratch/**'],
   },
   resolve: {
     alias: {
