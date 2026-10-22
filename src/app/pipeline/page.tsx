@@ -293,7 +293,8 @@ export default function PipelinePage() {
       (deal.contact && deal.contact.name.toLowerCase().includes(search.toLowerCase()));
     const matchesStage = stageFilter === 'ALL' || deal.stage === stageFilter;
     const dealTemp = (deal.temperature || 'WARM').toUpperCase();
-    const matchesPriority = priorityFilter === 'ALL' || dealTemp === priorityFilter;
+    const isClosed = deal.stage === 'WON' || deal.stage === 'LOST';
+    const matchesPriority = priorityFilter === 'ALL' || (!isClosed && dealTemp === priorityFilter);
     return matchesSearch && matchesStage && matchesPriority;
   });
 
@@ -519,9 +520,29 @@ export default function PipelinePage() {
                       ? 'bg-amber-50 text-amber-700 border-amber-200'
                       : 'bg-slate-100 text-slate-700 border-slate-200';
 
-                    // Priority visual style
+                    // Priority visual style (Urgency only applies to active pipeline deals: LEAD & QUALIFIED)
+                    const isClosedWon = deal.stage === 'WON';
+                    const isClosedLost = deal.stage === 'LOST';
+                    const isClosed = isClosedWon || isClosedLost;
+
                     const temp = (deal.temperature || 'WARM').toUpperCase();
-                    const priorityStyle = temp === 'HOT'
+                    const priorityStyle = isClosedWon
+                      ? {
+                          label: 'Closed Won',
+                          border: 'border-l-4 border-l-emerald-500 shadow-emerald-500/5',
+                          badge: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+                          dot: 'bg-emerald-500',
+                          icon: Award,
+                        }
+                      : isClosedLost
+                      ? {
+                          label: 'Closed Lost',
+                          border: 'border-l-4 border-l-slate-300 opacity-75',
+                          badge: 'bg-slate-100 text-slate-500 border-slate-200',
+                          dot: 'bg-slate-400',
+                          icon: Clock,
+                        }
+                      : temp === 'HOT'
                       ? {
                           label: 'High Priority',
                           border: 'border-l-4 border-l-rose-500 shadow-rose-500/10',
@@ -550,9 +571,9 @@ export default function PipelinePage() {
                         key={deal.id}
                         className={`calm-card p-3.5 space-y-2 bg-white relative group transition-all hover:shadow-md ${priorityStyle.border}`}
                       >
-                        {/* Top: Priority Tag & Value */}
+                        {/* Top: Status Tag & Value */}
                         <div className="flex items-center justify-between gap-1.5">
-                          <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider border ${priorityStyle.badge}`}>
+                          <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${priorityStyle.badge}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${priorityStyle.dot}`} />
                             <priorityStyle.icon className="w-3 h-3 shrink-0" />
                             <span>{priorityStyle.label}</span>
