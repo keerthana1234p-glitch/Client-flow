@@ -629,11 +629,22 @@ export default function PipelinePage() {
 
                         {/* Status / Priority Score Meter */}
                         {deal.stage === 'WON' ? (
-                          <div className="pt-1.5 border-t border-slate-100 text-[10px]">
+                          <div className="pt-1.5 border-t border-slate-100 space-y-1.5 text-[10px]">
                             <div className="flex items-center justify-between font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-md">
                               <span className="flex items-center gap-1">
                                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                                 <span>Closed Won • Deal Finalized</span>
+                              </span>
+                            </div>
+
+                            {/* TeamFlow Sync Status Indicator */}
+                            <div className="flex items-center justify-between gap-1 p-1.5 rounded-lg bg-gradient-to-r from-cyan-50 to-sky-50 border border-cyan-200 text-cyan-900 shadow-2xs">
+                              <span className="flex items-center gap-1.5 font-bold text-[10px] text-cyan-800">
+                                <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+                                <span>Synced to TeamFlow Delivery</span>
+                              </span>
+                              <span className="text-[9px] font-mono font-bold bg-white text-cyan-700 px-1.5 py-0.2 rounded border border-cyan-200">
+                                HTTP 200 OK
                               </span>
                             </div>
                           </div>
