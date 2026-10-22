@@ -58,6 +58,7 @@ export async function POST(req: NextRequest) {
         stage: assignedStage,
         contactId: contactId && contactId.trim() ? contactId.trim() : null,
         workspaceId: session!.workspaceId,
+        temperature: (temperature || 'WARM').toUpperCase(),
         lastActivityAt: new Date(),
       },
     });

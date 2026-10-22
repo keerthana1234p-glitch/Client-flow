@@ -143,6 +143,7 @@ async function main() {
       title: 'Autonomous Fleet Telemetry Suite',
       value: 125000, // > 100k (+5)
       stage: 'QUALIFIED', // (+3)
+      temperature: 'HOT',
       contactId: contact1.id,
       workspaceId: ws1.id,
       lastActivityAt: daysAgo(2),
@@ -156,6 +157,7 @@ async function main() {
       title: 'Kubernetes Multi-Region Cluster',
       value: 45000,
       stage: 'LEAD',
+      temperature: 'WARM',
       contactId: contact2.id,
       workspaceId: ws1.id,
       lastActivityAt: daysAgo(16), // > 14 days stale (+10)
@@ -169,6 +171,7 @@ async function main() {
       title: 'AI Diagnostic Radiology Portal',
       value: 80000,
       stage: 'QUALIFIED', // (+3)
+      temperature: 'HOT',
       contactId: contact3.id,
       workspaceId: ws1.id,
       lastActivityAt: daysAgo(9), // 7-14 days stale (+7)
@@ -182,12 +185,12 @@ async function main() {
       title: 'Enterprise Single Sign-On Module',
       value: 35000,
       stage: 'WON',
+      temperature: 'NORMAL',
       contactId: contact1.id,
       workspaceId: ws1.id,
       lastActivityAt: daysAgo(1),
     },
   });
-
   // Deal 5 in Workspace 2 (Isolated)
   await prisma.deal.create({
     data: {
@@ -195,6 +198,7 @@ async function main() {
       title: 'Confidential Workspace 2 Secret Contract',
       value: 500000,
       stage: 'LEAD',
+      temperature: 'NORMAL',
       workspaceId: ws2.id,
       lastActivityAt: now,
     },

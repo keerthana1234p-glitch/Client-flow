@@ -35,6 +35,7 @@ interface Deal {
   title: string;
   value: number;
   stage: string;
+  temperature?: string;
   lastActivityAt: string;
   contact?: { name: string; email: string };
   followUps?: { id: string; dueAt: string; status: string; action: string }[];
@@ -76,6 +77,7 @@ export default function PipelinePage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [stageFilter, setStageFilter] = useState<string>('ALL');
+  const [priorityFilter, setPriorityFilter] = useState<string>('ALL');
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [userRole, setUserRole] = useState<string>('ADMIN');
 
@@ -290,7 +292,9 @@ export default function PipelinePage() {
       deal.title.toLowerCase().includes(search.toLowerCase()) ||
       (deal.contact && deal.contact.name.toLowerCase().includes(search.toLowerCase()));
     const matchesStage = stageFilter === 'ALL' || deal.stage === stageFilter;
-    return matchesSearch && matchesStage;
+    const dealTemp = (deal.temperature || 'WARM').toUpperCase();
+    const matchesPriority = priorityFilter === 'ALL' || dealTemp === priorityFilter;
+    return matchesSearch && matchesStage && matchesPriority;
   });
 
   return (
@@ -397,6 +401,36 @@ export default function PipelinePage() {
               );
             })}
           </div>
+
+          {/* Priority Quick Filter */}
+          <div className="flex items-center gap-1 pl-2 border-l border-slate-200 overflow-x-auto py-1">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider hidden xl:inline">Priority:</span>
+            {[
+              { id: 'ALL', label: 'All', active: 'bg-slate-800 text-white' },
+              { id: 'HOT', label: '🔥 High', active: 'bg-rose-600 text-white shadow-xs' },
+              { id: 'WARM', label: '⚡ Medium', active: 'bg-amber-600 text-white shadow-xs' },
+              { id: 'NORMAL', label: 'Standard', active: 'bg-slate-600 text-white shadow-xs' },
+            ].map((p) => {
+              const isSelected = priorityFilter === p.id;
+              const count = p.id === 'ALL' 
+                ? deals.length 
+                : deals.filter(d => (d.temperature || 'WARM').toUpperCase() === p.id).length;
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => setPriorityFilter(p.id)}
+                  className={`px-2 py-0.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1 ${
+                    isSelected
+                      ? p.active
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  }`}
+                >
+                  <span>{p.label}</span>
+                  <span className="text-[10px] opacity-80">({count})</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Action Button: Show New Deal for authorized roles, or calm Read-only badge for Viewer */}
@@ -485,20 +519,55 @@ export default function PipelinePage() {
                       ? 'bg-amber-50 text-amber-700 border-amber-200'
                       : 'bg-slate-100 text-slate-700 border-slate-200';
 
+                    // Priority visual style
+                    const temp = (deal.temperature || 'WARM').toUpperCase();
+                    const priorityStyle = temp === 'HOT'
+                      ? {
+                          label: 'High Priority',
+                          border: 'border-l-4 border-l-rose-500 shadow-rose-500/10',
+                          badge: 'bg-rose-50 text-rose-700 border-rose-200 ring-1 ring-rose-400/20',
+                          dot: 'bg-rose-500 animate-pulse',
+                          icon: Flame,
+                        }
+                      : temp === 'NORMAL'
+                      ? {
+                          label: 'Standard',
+                          border: 'border-l-4 border-l-slate-300',
+                          badge: 'bg-slate-100 text-slate-600 border-slate-200',
+                          dot: 'bg-slate-400',
+                          icon: Clock,
+                        }
+                      : {
+                          label: 'Medium Priority',
+                          border: 'border-l-4 border-l-amber-500 shadow-amber-500/10',
+                          badge: 'bg-amber-50 text-amber-700 border-amber-200 ring-1 ring-amber-400/20',
+                          dot: 'bg-amber-500',
+                          icon: Zap,
+                        };
+
                     return (
                       <div
                         key={deal.id}
-                        className="calm-card p-3.5 space-y-2.5 bg-white relative group"
+                        className={`calm-card p-3.5 space-y-2 bg-white relative group transition-all hover:shadow-md ${priorityStyle.border}`}
                       >
+                        {/* Top: Priority Tag & Value */}
+                        <div className="flex items-center justify-between gap-1.5">
+                          <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider border ${priorityStyle.badge}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${priorityStyle.dot}`} />
+                            <priorityStyle.icon className="w-3 h-3 shrink-0" />
+                            <span>{priorityStyle.label}</span>
+                          </span>
+                          <span className="text-xs font-mono font-black text-slate-900 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
+                            ${deal.value.toLocaleString()}
+                          </span>
+                        </div>
+
                         {/* Title & Value & Actions */}
                         <div className="flex items-start justify-between gap-2">
                           <h3 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 min-w-0 flex-1">
                             {deal.title}
                           </h3>
                           <div className="flex items-center gap-1.5 shrink-0">
-                            <span className="text-xs font-mono font-black text-slate-900 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
-                              ${deal.value.toLocaleString()}
-                            </span>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
