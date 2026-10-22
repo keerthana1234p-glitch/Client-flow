@@ -15,8 +15,7 @@ import {
   Briefcase, 
   UserCheck, 
   Eye,
-  LogOut,
-  FolderKanban
+  LogOut
 } from 'lucide-react';
 import { OjixLogo } from '@/components/OjixLogo';
 
@@ -84,8 +83,8 @@ export function HeaderNav() {
   const [istTime, setIstTime] = useState<string>('');
   const [overdueCount, setOverdueCount] = useState<number>(0);
 
-  // If on login or signup page, DO NOT render the dashboard header at all
-  const isAuthPage = pathname === '/login' || pathname === '/signup';
+  // If on login, signup, or standalone TeamFlow page, DO NOT render the ClientFlow CRM header
+  const isAuthPage = pathname === '/login' || pathname === '/signup' || pathname === '/teamflow';
 
   // Live IST Clock
   useEffect(() => {
@@ -173,7 +172,6 @@ export function HeaderNav() {
       return [
         { href: '/contacts', label: 'Client Contacts', icon: Users, badge: null },
         { href: '/pipeline', label: 'Pipeline Overview', icon: Kanban, badge: 'Read-only' },
-        { href: '/projects', label: 'Team Projects', icon: FolderKanban, badge: 'TeamFlow', badgeColor: 'bg-cyan-50 text-cyan-800 border border-cyan-200' },
       ];
     }
 
@@ -181,7 +179,6 @@ export function HeaderNav() {
       return [
         { href: '/contacts', label: 'Contacts', icon: Users, badge: null },
         { href: '/pipeline', label: 'My Pipeline', icon: Kanban, badge: null },
-        { href: '/projects', label: 'Team Projects', icon: FolderKanban, badge: 'TeamFlow', badgeColor: 'bg-cyan-50 text-cyan-800 border border-cyan-200' },
         { 
           href: '/queue/overdue', 
           label: 'My Overdue Tasks', 
@@ -196,7 +193,6 @@ export function HeaderNav() {
       return [
         { href: '/contacts', label: 'Contacts', icon: Users, badge: null },
         { href: '/pipeline', label: 'Pipeline', icon: Kanban, badge: null },
-        { href: '/projects', label: 'Team Projects', icon: FolderKanban, badge: 'TeamFlow', badgeColor: 'bg-cyan-50 text-cyan-800 border border-cyan-200' },
         { 
           href: '/queue/overdue', 
           label: 'Overdue Follow-ups', 
@@ -211,7 +207,6 @@ export function HeaderNav() {
     return [
       { href: '/contacts', label: 'Contacts', icon: Users, badge: null },
       { href: '/pipeline', label: 'Pipeline', icon: Kanban, badge: null },
-      { href: '/projects', label: 'Team Projects', icon: FolderKanban, badge: 'TeamFlow', badgeColor: 'bg-cyan-50 text-cyan-800 border border-cyan-200' },
       { 
         href: '/queue/overdue', 
         label: 'Overdue Follow-ups', 
